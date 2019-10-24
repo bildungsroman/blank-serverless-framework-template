@@ -7,4 +7,3 @@ provider:
 plugins:
   - serverless-cf-vars
   - serverless-iam-roles-per-function
-  - serverless-iam-roles-per-function
