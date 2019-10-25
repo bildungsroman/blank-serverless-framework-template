@@ -7,3 +7,33 @@ provider:
 plugins:
   - serverless-cf-vars
   - serverless-iam-roles-per-function
+  - serverless-iam-roles-per-function
+functions:
+  testFunction:
+    handler: index.handler
+    description:
+      Fn::Sub:
+        - 'Stack #{StackTagName} Environment #{EnvironmentTagName} Function #{ResourceName}'
+        - ResourceName: testFunction
+    runtime: nodejs10.x
+    tracing: Active
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+          - xray:GetSamplingRules
+          - xray:GetSamplingTargets
+          - xray:GetSamplingStatisticSummaries
+        Resource: '*'
+resources:
+  Parameters:
+    StackTagName:
+      Type: String
+      Description: Stack Name (injected by Stackery at deployment time)
+      Default:
+        name: myService
+    EnvironmentTagName:
+      Type: String
+      Description: Environment Name (injected by Stackery at deployment time)
+      Default: dev
